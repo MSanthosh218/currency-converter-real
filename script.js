@@ -1,38 +1,44 @@
-// document.addEventListener("DOMContentLoaded" ,()=>{
-//     const conver_button=document.getElementById("convert");
-//     conver_button.addEventListener("click",convertcurrency);
-//     let currencyinfo;
+document.addEventListener("DOMContentLoaded", () => {
+    const convertButton = document.getElementById("convert");
+    convertButton.addEventListener("click", convertCurrency);
 
 
-//     function getlistofcurrencies(){
+    function getListOfCurrencies() {
+        return fetch("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies.json").then(res => res.json());
+    }
 
-//         return fetch("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies.json").then(res => res.json())
-//     }
     
+    function buildCurrencyOptions() {
+        getListOfCurrencies().then(listOfCurrencies => {
+            const fromCurrencies = document.getElementById("fromcurrrency");
+            const toCurrencies = document.getElementById("tocurrency");
+            for (let key in listOfCurrencies) {
+                const fromCurrencyOption = document.createElement("option");
+                fromCurrencyOption.value = key;
+                fromCurrencyOption.innerText = listOfCurrencies[key];
+                fromCurrencies.appendChild(fromCurrencyOption);
 
-//     function buildigcurrenciesoption(){
-//         let listofcurrencies;
-//         getlistofcurrencies().then(result=>{
-//             listofcurrencies=result;
-//             let fromcurrencies=document.getElementById("fromcurrrency");
-//             let tocurrencies=document.getElementById("tocurrency")
-//             for(let key in listofcurrencies ){
-//                 let fromcurrrencyoption=document.createElement("option");
-//                 fromcurrrencyoption.id=`${key}_from`;
-//                 fromcurrrencyoption.value=key;
-//                 fromcurrrencyoption.innerText=listofcurrencies[key];
-//                 fromcurrencies.appendChild(fromcurrrencyoption);
-//                 let toCurrencyOption = document.createElement("option");
-//                 toCurrencyOption.id = `${key}_to`;
-//                 toCurrencyOption.value = key;
-//                 toCurrencyOption.textContent = listOfCurrencies[key];
-//                 tocurrency.appendChild(toCurrencyOption);
-//             }
+                const toCurrencyOption = document.createElement("option");
+                toCurrencyOption.value = key;
+                toCurrencyOption.innerText = listOfCurrencies[key];
+                toCurrencies.appendChild(toCurrencyOption);
+            }
+        });
+    }
 
-//             })
-//         }
-//     })
-    
+    function convertCurrency() {
+        const fromCurrency = document.getElementById("fromcurrrency").value;
+        const toCurrency = document.getElementById("tocurrency").value;
+        const amount = document.getElementById("amount").value;
 
+        fetch(`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/convert/${fromCurrency}/${toCurrency}.json`)
+            .then(res => res.json())
+            .then(data => {
+                const conversionRate = data[toCurrency];
+                document.getElementById("result").value = (amount * conversionRate).toFixed(2);
+            });
+    }
 
-
+ 
+    buildCurrencyOptions();
+});
