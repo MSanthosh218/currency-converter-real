@@ -1,0 +1,29 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 100vw;
+    height: 100vh;
+    border: 1px solid #ccc; /* Example border */
+}
+
+.container, .items, .bottom {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.items > select {
+    width: 180px;
+    margin-bottom: 10px; /* Added margin for better spacing */
+}
+
+.bottom {
+    padding: 5px;
+    margin-top: 10px;
+}
